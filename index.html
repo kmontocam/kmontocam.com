@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-US">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -275,7 +275,7 @@
                 hx-swap="none"
                 hx-trigger="click"
                 id="change-to-en"
-                onclick="changeDomLanguage('en-US')"
+                onclick="changeDomLanguage('en-US'); toggleCollapsedMenu('toggle-menu')"
               >
                 <span> English </span>
               </li>
@@ -286,7 +286,7 @@
                 hx-swap="none"
                 hx-trigger="click"
                 id="change-to-es"
-                onclick="changeDomLanguage('es-LA')"
+                onclick="changeDomLanguage('es-LA'); toggleCollapsedMenu('toggle-menu')"
               >
                 <span> Spanish </span>
               </li>
@@ -369,7 +369,7 @@
                   hx-ext="json-enc"
                   hx-swap="none"
                   hx-trigger="click"
-                  onclick="changeDomLanguage('es-US')"
+                  onclick="changeDomLanguage('es-US'); toggleCollapsedMenu('toggle-menu')"
                 >
                   <span> English </span>
                 </li>
@@ -379,7 +379,7 @@
                   hx-ext="json-enc"
                   hx-swap="none"
                   hx-trigger="click"
-                  onclick="changeDomLanguage('es-LA')"
+                  onclick="changeDomLanguage('es-LA'); toggleCollapsedMenu('toggle-menu')"
                 >
                   <span> Spanish </span>
                 </li>
