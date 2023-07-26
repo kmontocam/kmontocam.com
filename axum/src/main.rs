@@ -62,25 +62,25 @@ async fn translate(cookies: Cookies, headers: HeaderMap) -> String {
             return "".to_string();
         }
     };
-     let translation_key: String = html_id.to_string().replace("-", "_");
-     let translation = TRANSLATIONS.lang[&active_language].translated_content[&translation_key].to_string();
-     translation
- }
+    let translation_key: String = html_id.to_string().replace("-", "_");
+    let translation = TRANSLATIONS.lang[&active_language].translated_content[&translation_key].to_string();
+    translation
+}
 
 
- lazy_static! {
-     static ref TRANSLATIONS: Translations = read_translations_json("./lang/translations.json").unwrap();
- }
+lazy_static! {
+    static ref TRANSLATIONS: Translations = read_translations_json("./lang/translations.json").unwrap();
+}
 
- #[tokio::main]
- async fn main() {
-     let app = Router::new()
-         .route("/lang", post(trigger_lng_switch))
-         .route("/lang/switch", get(translate))
-         .layer(CookieManagerLayer::new());
+#[tokio::main]
+async fn main() {
+    let app = Router::new()
+        .route("/lang", post(trigger_lng_switch))
+        .route("/lang/switch", get(translate))
+        .layer(CookieManagerLayer::new());
 
-     let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 3000);
-     let server = Server::bind(&address);
+    let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 3000);
+    let server = Server::bind(&address);
 
-     server.serve(app.into_make_service()).await.unwrap()
- }
+    server.serve(app.into_make_service()).await.unwrap()
+}
