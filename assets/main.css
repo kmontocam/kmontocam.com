@@ -117,12 +117,17 @@ body {
     color: #e9e9e9;
   }
 
+  div.main-body div.studies span.bs-title {
+    color: #ffffff;
+  }
+
   div.main-body div.studies div.bs-tec-logo svg.torch,
   div.main-body div.studies div.bs-tec-logo svg.school-name {
     fill: #ffffff;
   }
 
   div.main-body div.experience div.work-showcase div.container {
+    border: 2px solid #323232;
     background-color: #242424;
   }
 
@@ -353,12 +358,13 @@ nav.navbar
 nav.navbar div.right-side div.collapse-dropdown #options-list {
   visibility: hidden;
 }
+
 div.main-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px 64px;
+  padding: 0px 32px;
 }
 
 div.main-body p {
@@ -448,8 +454,7 @@ div.main-body div.experience div.work-showcase {
   align-items: stretch;
   flex-wrap: wrap;
   grid-gap: 32px;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  padding: 16px 0px;
 }
 
 div.main-body div.experience div.work-showcase div.container {
@@ -457,20 +462,17 @@ div.main-body div.experience div.work-showcase div.container {
   flex-direction: column;
   align-items: center;
   width: calc(32vw);
-  /* min-width: 384px; */
   max-width: 512px;
   border-radius: 16px;
   box-shadow:
-    0px 4px 8px 0px rgba(0, 0, 0, 0.2),
-    0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    0px 8px 16px 0px rgba(0, 0, 0, 0.04),
+    0px 8px 16px 0px rgba(0, 0, 0, 0.04);
   padding: 0px 32px;
 }
 
 @media (max-width: 896px) {
   div.main-body div.experience div.work-showcase div.container {
     width: calc(64vw);
-    max-width: none;
-    min-width: 368px;
   }
 }
 
@@ -520,7 +522,7 @@ div.main-body div.friends {
 }
 
 div.main-body div.friends p {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 div.main-body div.friends div.avatars {
@@ -529,6 +531,7 @@ div.main-body div.friends div.avatars {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  padding: 16px 0px;
   grid-gap: 16px;
 }
 
