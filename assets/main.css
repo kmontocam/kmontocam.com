@@ -77,6 +77,10 @@ body {
     color: #ffffff;
   }
 
+  svg #hairline {
+    stroke: #ffffff;
+  }
+
   header {
     background-color: #202020;
     border-bottom: 1px solid #323232;
@@ -137,11 +141,7 @@ body {
     fill: #ffffff;
   }
 
-  div.main-body div.friends div.avatars svg #hairline {
-    stroke: #ffffff;
-  }
-
-  div.main-body div.friends div.avatars svg path.bg-hair {
+  div.main-body div.friends div.avatars svg path.bg-fill {
     fill: #161616;
   }
 
@@ -157,6 +157,10 @@ body {
   footer div.right-side svg.logo-fill {
     fill: #ffffff;
   }
+}
+
+a.logo {
+  line-height: 0;
 }
 
 header {
@@ -408,7 +412,7 @@ div.main-body div.studies p {
   font-size: 20px;
 }
 
-div.main-body div.studies span.bachelor-title {
+div.main-body div.studies span.bs-title {
   font-size: 24px;
   font-style: italic;
 }
@@ -424,13 +428,13 @@ div.main-body div.studies div.bs-tec-logo {
 }
 
 div.main-body div.studies div.bs-tec-logo svg.torch {
-  width: 130.5px;
-  height: 130.5px;
+  width: 128px;
+  height: 128px;
 }
 
 div.main-body div.studies div.bs-tec-logo svg.school-name {
   width: 320px;
-  height: 108.75px;
+  height: 110px;
 }
 
 div.main-body div.experience {
