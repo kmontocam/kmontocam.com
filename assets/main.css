@@ -14,9 +14,8 @@ body {
   font-family: var(--font-family-sans-serif);
   font-size: 16px;
   line-height: 1.5;
-  margin: 0;
-  padding: 0;
-  min-width: 466px;
+  margin: 0px;
+  padding: 0px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -38,9 +37,11 @@ body {
     border-right: 1px solid #e4e4e4;
   }
 
-  nav.navbar div.right-side li:hover,
-  nav.navbar div.right-side div.language-selector:hover {
-    background-color: #f4f4f4;
+  @media (hover: hover) {
+    nav.navbar div.right-side li:hover,
+    nav.navbar div.right-side div.language-selector:hover {
+      background-color: #f4f4f4;
+    }
   }
 
   nav.navbar div.right-side ul,
@@ -61,13 +62,23 @@ body {
     color: #161616;
   }
 
+  div.main-body div.studies span.bs-title {
+    color: #000000;
+  }
+
+  div.main-body div.experience div.work-showcase div.container {
+    border: 2px solid #e4e4e4;
+  }
+
   footer {
     background-color: #ffffff;
     border-top: 1px solid #e4e4e4;
   }
 
-  footer div.right-side li:hover {
-    background-color: #f4f4f4;
+  @media (hover: hover) {
+    footer div.right-side li:hover {
+      background-color: #f4f4f4;
+    }
   }
 }
 
@@ -94,9 +105,11 @@ body {
     border-right: 1px solid #323232;
   }
 
-  nav.navbar div.right-side li:hover,
-  nav.navbar div.right-side div.language-selector:hover {
-    background-color: #363636;
+  @media (hover: hover) {
+    nav.navbar div.right-side li:hover,
+    nav.navbar div.right-side div.language-selector:hover {
+      background-color: #363636;
+    }
   }
 
   nav.navbar div.right-side ul,
@@ -155,8 +168,10 @@ body {
     border-bottom: 1px solid #323232;
   }
 
-  footer div.right-side li:hover {
-    background-color: #363636;
+  @media (hover: hover) {
+    footer div.right-side li:hover {
+      background-color: #363636;
+    }
   }
 
   footer div.right-side svg.logo-fill {
@@ -582,17 +597,33 @@ footer div.right-side svg {
   height: 32px;
 }
 
-footer div.right-side li.linkedin:hover svg.logo-fill {
-  fill: #3375b0;
+@media (hover: hover) {
+  footer div.right-side li.linkedin:hover svg.logo-fill {
+    fill: #3375b0;
+  }
+}
+
+@media (max-width: 384px) {
+  div.main-body div.studies div.bs-tec-logo svg.torch {
+    width: 96px;
+    height: 96px;
+  }
+
+  div.main-body div.studies div.bs-tec-logo svg.school-name {
+    width: 240px;
+    height: 82.5px;
+  }
+
+  div.main-body div.experience div.work-showcase div.cemex svg.logo {
+    width: 187.5px;
+    height: 40.5px;
+  }
 }
 
 @media (max-width: 466px) {
-  html {
-    overflow-x: auto;
-  }
-
   footer {
     flex-direction: column;
+    text-align: center;
   }
 
   footer div.right-side {
