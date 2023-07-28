@@ -548,6 +548,7 @@ div.main-body div.friends div.avatars {
   flex-wrap: wrap;
   padding: 16px 0px;
   grid-gap: 16px;
+  max-width: 1024px;
 }
 
 div.main-body div.friends div.avatars svg {
