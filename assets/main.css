@@ -163,6 +163,10 @@ body {
     fill: #161616;
   }
 
+  div.main-body div.friends div.avatars svg path.outside-hair {
+    stroke: #ffffff;
+  }
+
   footer {
     background-color: #202020;
     border-bottom: 1px solid #323232;
