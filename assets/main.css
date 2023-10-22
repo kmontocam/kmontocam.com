@@ -29,7 +29,7 @@ body {
     border-bottom: 1px solid #e4e4e4;
   }
 
-  nav.navbar div.static-logo svg.kmontocam {
+  nav.navbar div.static-logo svg.name {
     fill: #000000;
   }
 
@@ -97,7 +97,7 @@ body {
     border-bottom: 1px solid #323232;
   }
 
-  nav.navbar div.static-logo svg.kmontocam {
+  nav.navbar div.static-logo svg.name {
     fill: #ffffff;
   }
 
@@ -134,9 +134,9 @@ body {
     color: #ffffff;
   }
 
-  div.main-body div.studies div.bs-tec-logo svg.torch,
-  div.main-body div.studies div.bs-tec-logo svg.school-name {
-    fill: #ffffff;
+  div.main-body div.studies div.bs-tec object.logo,
+  div.main-body div.studies div.bs-tec object.name {
+    filter: invert(1);
   }
 
   div.main-body div.experience div.work-showcase div.container {
@@ -144,26 +144,16 @@ body {
     background-color: #242424;
   }
 
-  div.main-body
-    div.experience
-    div.work-showcase
-    div.cemex
-    svg.logo
-    path.blue-default,
-  div.main-body
-    div.experience
-    div.work-showcase
-    div.cemex
-    svg.logo
-    path.red-default {
+  svg path.blue-default,
+  svg path.red-default {
     fill: #ffffff;
   }
 
-  div.main-body div.friends div.avatars svg path.bg-fill {
+  svg path.bg-fill {
     fill: #161616;
   }
 
-  div.main-body div.friends div.avatars svg path.outside-hair {
+  svg path.outside-hair {
     stroke: #ffffff;
   }
 
@@ -209,12 +199,12 @@ nav.navbar div.static-logo {
   grid-gap: 8px;
 }
 
-nav.navbar div.static-logo svg.minion {
+nav.navbar div.static-logo svg.kevin {
   width: 32px;
   height: 32px;
 }
 
-nav.navbar div.static-logo svg.kmontocam {
+nav.navbar div.static-logo svg.name {
   width: 91px;
   height: 14px;
 }
@@ -446,7 +436,7 @@ div.main-body div.studies span.bs-title {
   font-style: italic;
 }
 
-div.main-body div.studies div.bs-tec-logo {
+div.main-body div.studies div.bs-tec {
   display: flex;
   flex-direction: horizontal;
   justify-content: center;
@@ -456,12 +446,12 @@ div.main-body div.studies div.bs-tec-logo {
   padding: 16px 0px;
 }
 
-div.main-body div.studies div.bs-tec-logo svg.torch {
+div.main-body div.studies div.bs-tec object.logo {
   width: 128px;
   height: 128px;
 }
 
-div.main-body div.studies div.bs-tec-logo svg.school-name {
+div.main-body div.studies div.bs-tec object.name {
   width: 320px;
   height: 110px;
 }
@@ -507,7 +497,7 @@ div.main-body div.experience div.work-showcase div.container p {
 div.main-body div.experience div.work-showcase div.container a.ref-to-repo {
   color: inherit;
 }
-div.main-body div.experience div.work-showcase div.cemex svg.logo {
+div.main-body div.experience div.work-showcase div.cemex object.logo {
   width: 250px;
   height: 54px;
   padding: 16px 0px;
@@ -523,7 +513,7 @@ div.main-body div.experience div.work-showcase div.container div.toolkit {
   padding: 16px 0px;
 }
 
-div.main-body div.experience div.work-showcase div.toolkit svg {
+div.main-body div.experience div.work-showcase div.toolkit object {
   width: 64px;
   height: 64px;
 }
@@ -559,7 +549,7 @@ div.main-body div.friends div.avatars {
   max-width: 1024px;
 }
 
-div.main-body div.friends div.avatars svg {
+div.main-body div.friends div.avatars object {
   width: 128px;
   height: 128px;
 }
@@ -613,17 +603,17 @@ footer div.right-side svg {
 }
 
 @media (max-width: 384px) {
-  div.main-body div.studies div.bs-tec-logo svg.torch {
+  div.main-body div.studies div.bs-tec object.logo {
     width: 96px;
     height: 96px;
   }
 
-  div.main-body div.studies div.bs-tec-logo svg.school-name {
+  div.main-body div.studies div.bs-tec object.name {
     width: 240px;
     height: 82.5px;
   }
 
-  div.main-body div.experience div.work-showcase div.cemex svg.logo {
+  div.main-body div.experience div.work-showcase div.cemex object.logo {
     width: 187.5px;
     height: 40.5px;
   }
