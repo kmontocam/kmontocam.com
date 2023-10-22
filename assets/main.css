@@ -386,6 +386,10 @@ div.main-body {
   padding: 0px 32px;
 }
 
+div.main-body > div {
+  margin: 16px 0px;
+}
+
 div.main-body p {
   font-size: 18px;
   max-width: 1024px;
