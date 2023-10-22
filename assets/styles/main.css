@@ -29,10 +29,6 @@ body {
     border-bottom: 1px solid #e4e4e4;
   }
 
-  nav.navbar div.static-logo svg.name {
-    fill: #000000;
-  }
-
   nav.navbar div.right-side div.listed-sections {
     border-right: 1px solid #e4e4e4;
   }
@@ -88,13 +84,13 @@ body {
     color: #ffffff;
   }
 
-  svg #hairline {
-    stroke: #ffffff;
-  }
-
   header {
     background-color: #202020;
     border-bottom: 1px solid #323232;
+  }
+
+  nav.navbar div.static-logo svg #hairline {
+    stroke: #ffffff;
   }
 
   nav.navbar div.static-logo svg.name {
@@ -134,27 +130,9 @@ body {
     color: #ffffff;
   }
 
-  div.main-body div.studies div.bs-tec object.logo,
-  div.main-body div.studies div.bs-tec object.name {
-    filter: invert(1);
-  }
-
   div.main-body div.experience div.work-showcase div.container {
     border: 2px solid #323232;
     background-color: #242424;
-  }
-
-  svg path.blue-default,
-  svg path.red-default {
-    fill: #ffffff;
-  }
-
-  svg path.bg-fill {
-    fill: #161616;
-  }
-
-  svg path.outside-hair {
-    stroke: #ffffff;
   }
 
   footer {
