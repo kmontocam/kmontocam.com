@@ -44,7 +44,7 @@ fn read_translations_json(path: &str) -> Result<Translations, Box<dyn Error>> {
     return Ok(translations);
 }
 
-async fn trigger_lng_switch(Json(payload): Json<Language>) -> impl IntoResponse {
+async fn trigger_lang_switch(Json(payload): Json<Language>) -> impl IntoResponse {
     let trigger = AppendHeaders([("HX-Trigger", "changeLanguage")]);
     let cookies = AppendHeaders([(SET_COOKIE, format!("LANG={}", payload.lang))]);
     return (trigger, cookies);
@@ -79,7 +79,7 @@ async fn main() {
     let app = Router::new()
         .nest_service("/", ServeDir::new("../../index.html"))
         .nest_service("/assets", ServeDir::new("../../assets/"))
-        .route("/api/lang", post(trigger_lng_switch))
+        .route("/api/lang", post(trigger_lang_switch))
         .route("/api/lang/switch", get(translate))
         .layer(CookieManagerLayer::new());
 
