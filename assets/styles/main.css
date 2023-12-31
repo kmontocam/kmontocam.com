@@ -420,7 +420,7 @@ div.main-body div.studies div.bs-tec {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  grid-gap: 32px;
+  grid-gap: 32px; /* TODO: replace with modern option */
   padding: 16px 0px;
 }
 
@@ -444,6 +444,7 @@ div.main-body div.experience div.work-showcase {
   justify-content: center;
   align-items: stretch;
   flex-wrap: wrap;
+  max-width: 1280px;
   grid-gap: 32px;
   padding: 16px 0px;
 }
@@ -475,6 +476,13 @@ div.main-body div.experience div.work-showcase div.container p {
 div.main-body div.experience div.work-showcase div.container a.ref-to-repo {
   color: inherit;
 }
+
+div.main-body div.experience div.work-showcase div.hey object.logo {
+  width: 253.3px;
+  height: 54px;
+  padding: 16px 0px;
+}
+
 div.main-body div.experience div.work-showcase div.cemex object.logo {
   width: 250px;
   height: 54px;
@@ -493,6 +501,11 @@ div.main-body div.experience div.work-showcase div.container div.toolkit {
 
 div.main-body div.experience div.work-showcase div.toolkit object {
   width: 64px;
+  height: 64px;
+}
+
+div.main-body div.experience div.work-showcase div.toolkit object.extra-width {
+  width: 96px;
   height: 64px;
 }
 
