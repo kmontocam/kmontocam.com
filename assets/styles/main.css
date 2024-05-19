@@ -504,11 +504,6 @@ div.main-body div.experience div.work-showcase div.toolkit object {
   height: 64px;
 }
 
-div.main-body div.experience div.work-showcase div.toolkit object.extra-width {
-  width: 96px;
-  height: 64px;
-}
-
 div.main-body div.experience div.work-showcase div.nvim-conda h3 {
   font-size: 32px;
   text-align: center;
