@@ -31,7 +31,7 @@
     "nav_languages": "<li hx-post=\"/api/lang\" hx-vals='{\"lang\": \"en\"}' hx-ext=\"json-enc\" hx-swap=\"none\" hx-trigger=\"click\" onclick=\"changeDomLanguage('en-US'); toggleCollapsedMenu('toggle-menu')\"><span>Inglés</span></li><li hx-post=\"/api/lang\" hx-vals='{\"lang\": \"es\"}' hx-ext=\"json-enc\" hx-swap=\"none\" hx-trigger=\"click\" onclick=\"changeDomLanguage('en-LA'); toggleCollapsedMenu('toggle-menu')\"><span>Español</span></li>",
     "active_language_iso": "ES",
     "nav_collapsed_title_language": "Cambiar Idioma",
-    "home_heading": "¡Hola!",
+    "home_heading": "Aló",
     "home_intro": "Mi nombre es  <b>Kevin Montoya Campaña</b>, voy en cuarto año de carrera y me interesa mucho todo lo que tiene que ver con <span class=\"underline-data\">Aplicaciones de Datos</span>, <span class=\"underline-swe\">  Software</span> e <span class=\"underline-ai\">Inteligencia Artificial</span>. Mi parte favorita es cuando estas tres intersectan, pero cualquier cosa que tenga un aspecto tecnológico me llama la atención.",
     "home_outro": "Esta es mi página web. Nació con la intención de servir como portafolio, pero conforme he trabajado en ella tomé la decisión de darle otro giro. Definitivamente el diseño web no es mi mayor virtud, pero he aquí mi intento.",
     "studies_heading": "Academia",
