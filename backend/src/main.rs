@@ -1,6 +1,5 @@
 use serde::Deserialize;
-use std::error::Error;
-use std::fs::File;
+use std::{error::Error, fs::File};
 use std::io::BufReader;
 use std::{
     collections::HashMap,
@@ -70,7 +69,7 @@ async fn translate(cookies: Cookies, headers: HeaderMap) -> String {
 
 lazy_static! {
     static ref TRANSLATIONS: Translations =
-        read_translations_json("./lang/translations.json").unwrap();
+        read_translations_json("src/translations.json").unwrap();
 }
 
 #[tokio::main]
@@ -80,7 +79,7 @@ async fn main() {
         .route("/lang/switch", get(translate))
         .layer(CookieManagerLayer::new());
 
-    let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), 3000);
+    let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::UNSPECIFIED), 3000);
     let server = Server::bind(&address);
 
     server.serve(app.into_make_service()).await.unwrap()

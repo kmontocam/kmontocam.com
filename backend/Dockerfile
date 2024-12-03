@@ -25,5 +25,6 @@ RUN cargo build --release
 FROM debian:bookworm
 WORKDIR /usr/bin
 COPY --from=builder /tmp/target/release/kmontocam-backend .
+COPY src/translations.json src/translations.json
 EXPOSE 3000
 CMD ["/usr/bin/kmontocam-backend"]
