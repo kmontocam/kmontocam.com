@@ -1,86 +1,87 @@
-use serde::Deserialize;
-use std::{error::Error, fs::File};
-use std::io::BufReader;
-use std::{
-    collections::HashMap,
-    net::{IpAddr, Ipv4Addr, SocketAddr},
-};
+mod postgres;
+use crate::postgres::models::home::Translations;
+use axum::extract::State;
+use axum::http::HeaderValue;
+use postgres::models::home::LanguageCode;
+use sqlx::postgres::PgPoolOptions;
+use sqlx::{Pool, Postgres};
+use std::env;
+use std::error::Error;
+use std::str::FromStr;
 
 use axum::{
-    headers::HeaderMap,
-    http::header::SET_COOKIE,
+    extract::Path,
+    http::header::{HeaderMap, SET_COOKIE},
     response::{AppendHeaders, IntoResponse},
     routing::{get, post},
-    Json, Router, Server,
+    Router,
 };
 
-use lazy_static::lazy_static;
-use tower_cookies::{CookieManagerLayer, Cookies};
+use axum_extra::extract::cookie::{Cookie, CookieJar};
 
-#[derive(Deserialize)]
-struct Language {
-    lang: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct TranslatedContent {
-    #[serde(flatten)]
-    translated_content: HashMap<String, String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct Translations {
-    #[serde(flatten)]
-    lang: HashMap<String, TranslatedContent>,
-}
-
-fn read_translations_json(path: &str) -> Result<Translations, Box<dyn Error>> {
-    let file = File::open(path)?;
-    let reader = BufReader::new(file);
-    let translations: Translations = serde_json::from_reader(reader)?;
-
-    return Ok(translations);
-}
-
-async fn trigger_lang_switch(Json(payload): Json<Language>) -> impl IntoResponse {
+/// Hook to trigger a language switch in the document
+async fn trigger_language_switch(Path(code): Path<String>) -> impl IntoResponse {
     let trigger = AppendHeaders([("HX-Trigger", "changeLanguage")]);
-    let cookies = AppendHeaders([(SET_COOKIE, format!("LANG={}", payload.lang))]);
+    let cookies = AppendHeaders([(SET_COOKIE, format!("LANG={}", code))]);
     return (trigger, cookies);
 }
 
-async fn translate(cookies: Cookies, headers: HeaderMap) -> String {
-    let active_language: String = match cookies.get("LANG") {
-        Some(cookie) => cookie.value().to_string(),
-        None => "en".to_string(),
-    };
+/// Event to translate the content of the document, triggered by `HTMX-Trigger: changeLanguage`
+async fn language_switch(
+    State(state): State<AppState>,
+    jar: CookieJar,
+    headers: HeaderMap,
+) -> String {
+    let active_language: String = jar
+        .get("LANG")
+        .unwrap_or(&Cookie::new("LANG", "en"))
+        .value()
+        .to_string();
 
-    let html_id = match headers.get("HX-Trigger") {
-        Some(header) => header.to_str().unwrap(),
-        None => {
-            return "".to_string();
-        }
-    };
-    let translation_key: String = html_id.to_string().replace("-", "_");
-    let translation =
-        TRANSLATIONS.lang[&active_language].translated_content[&translation_key].to_string();
+    let translation_key: String = headers
+        .get("HX-Trigger")
+        .unwrap_or(&HeaderValue::from_str("").unwrap())
+        .to_str()
+        .unwrap()
+        .to_string()
+        .replace("-", "_");
 
-    return translation;
+    let translation = sqlx::query_file_as!(
+        Translations,
+        "src/postgres/queries/language_switch.sql",
+        LanguageCode::from_str(&active_language).unwrap_or_default() as LanguageCode,
+        translation_key
+    )
+    .fetch_one(&state.pool)
+    .await
+    .unwrap_or_default();
+
+    return translation.content;
 }
 
-lazy_static! {
-    static ref TRANSLATIONS: Translations =
-        read_translations_json("src/translations.json").unwrap();
+#[derive(Clone)]
+struct AppState {
+    pool: Pool<Postgres>,
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
+    let pool = PgPoolOptions::new()
+        .max_connections(4)
+        .connect(&env::var("DATABASE_URL").expect("expected DATABASE_URL environment variable"))
+        .await?;
+
+    sqlx::migrate!("./migrations").run(&pool).await?;
+
+    let state = AppState { pool };
+
     let app = Router::new()
-        .route("/lang", post(trigger_lang_switch))
-        .route("/lang/switch", get(translate))
-        .layer(CookieManagerLayer::new());
+        .route("/language/:code", post(trigger_language_switch))
+        .route("/language", get(language_switch))
+        .with_state(state);
 
-    let address = SocketAddr::new(IpAddr::V4(Ipv4Addr::UNSPECIFIED), 3000);
-    let server = Server::bind(&address);
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
+    axum::serve(listener, app).await?;
 
-    server.serve(app.into_make_service()).await.unwrap()
+    Ok(())
 }
