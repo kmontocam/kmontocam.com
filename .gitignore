@@ -14,3 +14,9 @@ Cargo.lock
 *.pdb
 
 avatars.json
+
+# sqlx
+.sqlx/
+
+# env
+.env
