@@ -1,13 +1,19 @@
 mod postgres;
 use crate::postgres::models::home::Translations;
+use axum::body::Body;
 use axum::extract::State;
 use axum::http::HeaderValue;
+use http::{Request, Response};
 use postgres::models::home::LanguageCode;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
 use std::env;
 use std::error::Error;
 use std::str::FromStr;
+use std::time::Duration;
+use tower::ServiceBuilder;
+use tower_http::trace::TraceLayer;
+use tracing::{info, Span};
 
 use axum::{
     extract::Path,
@@ -27,6 +33,7 @@ async fn trigger_language_switch(Path(code): Path<String>) -> impl IntoResponse 
 }
 
 /// Event to translate the content of the document, triggered by `HTMX-Trigger: changeLanguage`
+/// TODO: create span for the translation in order to include method and path in the response log
 async fn language_switch(
     State(state): State<AppState>,
     jar: CookieJar,
@@ -66,6 +73,13 @@ struct AppState {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let subscriber = tracing_logfmt::builder()
+        .subscriber_builder()
+        .with_max_level(tracing::Level::INFO)
+        .finish();
+
+    let _ = tracing::subscriber::set_global_default(subscriber);
+
     let pool = PgPoolOptions::new()
         .max_connections(4)
         .connect(&env::var("DATABASE_URL").expect("expected DATABASE_URL environment variable"))
@@ -78,6 +92,28 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let app = Router::new()
         .route("/language/:code", post(trigger_language_switch))
         .route("/language", get(language_switch))
+        .layer(
+            ServiceBuilder::new().layer(
+                TraceLayer::new_for_http()
+                    .on_request(|request: &Request<Body>, _span: &Span| {
+                        info!(
+                            rest = true,
+                            method = %request.method(),
+                            path = %request.uri().path(),
+                        )
+                    })
+                    .on_response(
+                        |response: &Response<Body>, latency: Duration, _span: &Span| {
+                            info!(
+                                rest = true,
+                                status = response.status().as_u16(),
+                                latency = latency.as_secs_f64(),
+                                unit = "s"
+                            )
+                        },
+                    ),
+            ),
+        )
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
