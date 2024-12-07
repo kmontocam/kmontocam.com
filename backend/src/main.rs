@@ -27,7 +27,7 @@ use axum_extra::extract::cookie::{Cookie, CookieJar};
 
 /// Hook to trigger a language switch in the document
 async fn trigger_language_switch(Path(code): Path<String>) -> impl IntoResponse {
-    let trigger = AppendHeaders([("HX-Trigger", "changeLanguage")]);
+    let trigger = AppendHeaders([("HX-Trigger", "change-language")]);
     let cookies = AppendHeaders([(SET_COOKIE, format!("LANG={}", code))]);
     return (trigger, cookies);
 }
@@ -50,8 +50,7 @@ async fn language_switch(
         .unwrap_or(&HeaderValue::from_str("").unwrap())
         .to_str()
         .unwrap()
-        .to_string()
-        .replace("-", "_");
+        .to_string();
 
     let translation = sqlx::query_file_as!(
         Translations,
