@@ -77,7 +77,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .with_max_level(tracing::Level::INFO)
         .finish();
 
-    let _ = tracing::subscriber::set_global_default(subscriber);
+    tracing::subscriber::set_global_default(subscriber)?;
 
     let pool = PgPoolOptions::new()
         .max_connections(4)
@@ -96,7 +96,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 TraceLayer::new_for_http()
                     .on_request(|request: &Request<Body>, _span: &Span| {
                         info!(
-                            rest = true,
+                            http = true,
                             method = %request.method(),
                             path = %request.uri().path(),
                         )
@@ -104,9 +104,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     .on_response(
                         |response: &Response<Body>, latency: Duration, _span: &Span| {
                             info!(
-                                rest = true,
+                                http = true,
                                 status = response.status().as_u16(),
-                                latency = latency.as_secs_f64(),
+                                latency = format!("{:.8}", latency.as_secs_f64()),
                                 unit = "s"
                             )
                         },
