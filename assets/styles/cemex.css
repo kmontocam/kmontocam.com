@@ -1,6 +1,0 @@
-@media (prefers-color-scheme: dark) {
-  svg path.blue-default,
-  svg path.red-default {
-    fill: #ffffff;
-  }
-}
