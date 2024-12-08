@@ -4,10 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tokio = { version = "1.42.0", features = ["full", "macros", "rt-multi-thread"] }
-serde = { version = "1.0.173", features = ["derive"] }
-serde_json = { version = "1.0"}
-lazy_static = { version = "1.4.0"}
+tokio = { version = "1.42.0", features = ["macros", "rt-multi-thread"] }
 axum = "0.7.9"
 axum-extra = { version = "0.9.6", features = ["cookie"] }
 sqlx = { version = "0.8.2", features = ["postgres", "runtime-tokio", "tls-rustls"] }
