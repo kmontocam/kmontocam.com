@@ -8,12 +8,9 @@
     />
     <link rel="stylesheet" type="text/css" href="assets/styles/main.css" />
     <script src="assets/scripts/main.js"></script>
-    <script
-      src="https://unpkg.com/htmx.org@1.9.3"
-      integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/path-params.js"></script>
+    <meta name="htmx-config" content='{"withCredentials": true, "selfRequestsOnly": false}'>
 
     <title>kmontocam</title>
 
@@ -143,70 +140,68 @@
             <ul>
               <a href="#studies">
                 <li
-                  hx-get="/api/lang/switch"
+                  hx-get="https://api.kmontocam.com/home/v1/language"
                   id="nav-section-studies"
-                  hx-trigger="load, changeLanguage from:body"
+                  hx-trigger="load, switch-language from:body"
                 >
                   Studies
                 </li>
               </a>
               <a href="#experience">
                 <li
-                  hx-get="/api/lang/switch"
+                  hx-get="https://api.kmontocam.com/home/v1/language"
                   id="nav-section-experience"
-                  hx-trigger="load, changeLanguage from:body"
+                  hx-trigger="load, switch-language from:body"
                 >
                   Experience
                 </li>
               </a>
               <a href="#friends">
                 <li
-                  hx-get="/api/lang/switch"
+                  hx-get="https://api.kmontocam.com/home/v1/language"
                   id="nav-section-friends"
-                  hx-trigger="load, changeLanguage from:body"
+                  hx-trigger="load, switch-language from:body"
                 >
                   Friends
                 </li>
               </a>
             </ul>
           </div>
-          <div class="language-selector">
+          <div class="language-selector" hx-ext="path-params">
             <svg class="globe" viewBox="0 0 16 16" fill="#000000">
               <path
                 d="M 11.7 0.9 C 8.2 -0.9 3.9 0.1 1.5 3.3 C -0.5 6.1 -0.5 9.9 1.5 12.7 C 1.5 12.7 1.5 12.7 1.5 12.7 C 2.2 13.7 3.2 14.5 4.3 15.1 C 7.8 16.9 12.1 15.9 14.5 12.7 C 17.3 8.7 16 3.2 11.7 0.9 Z M 14.1 12.1 C 13.2 11.8 12.2 11.6 11.3 11.5 C 11.5 10.5 11.6 9.5 11.7 8.3 L 15.3 8.3 C 15.3 9.7 14.8 11 14.1 12.1 Z M 1.9 12.1 C 1.2 11 0.7 9.7 0.7 8.3 L 4.3 8.3 C 4.4 9.5 4.5 10.5 4.7 11.5 C 3.8 11.6 2.8 11.8 1.9 12.1 Z M 1.9 3.9 C 2.8 4.2 3.8 4.4 4.7 4.5 C 4.5 5.5 4.4 6.5 4.3 7.7 L 0.7 7.7 C 0.7 6.3 1.2 5 1.9 3.9 Z M 8.3 11.3 L 8.3 8.3 L 11 8.3 C 11 9.4 10.9 10.5 10.6 11.5 C 9.9 11.4 9.1 11.3 8.3 11.3 Z M 5.4 11.5 C 5.1 10.5 5 9.4 5 8.3 L 7.7 8.3 L 7.7 11.3 C 6.9 11.3 6.1 11.4 5.4 11.5 Z M 7.7 4.7 L 7.7 7.7 L 5 7.7 C 5 6.6 5.1 5.5 5.4 4.5 C 6.1 4.6 6.9 4.7 7.7 4.7 Z M 8.3 7.7 L 8.3 4.7 C 9.1 4.7 9.9 4.6 10.6 4.5 C 10.9 5.5 11 6.6 11 7.7 L 8.3 7.7 Z M 8.3 4 L 8.3 0.7 C 9 0.9 9.6 1.6 10.1 2.7 C 10.2 3.1 10.3 3.5 10.5 3.9 C 9.8 4 9.1 4 8.3 4 Z M 7.7 0.7 L 7.7 4 C 6.9 4 6.2 4 5.5 3.9 C 5.7 3.5 5.8 3.1 5.9 2.7 C 6.4 1.6 7 0.9 7.7 0.7 Z M 7.7 12 L 7.7 15.3 C 7 15.1 6.4 14.4 5.9 13.3 C 5.8 12.9 5.7 12.5 5.5 12.1 C 6.2 12 6.9 12 7.7 12 Z M 8.3 15.3 L 8.3 12 C 9.1 12 9.8 12 10.5 12.1 C 10.3 12.5 10.2 12.9 10.1 13.3 C 9.6 14.4 9 15.1 8.3 15.3 Z M 11.7 7.7 C 11.6 6.5 11.5 5.5 11.3 4.5 C 12.2 4.4 13.2 4.2 14.1 3.9 C 14.8 5 15.3 6.3 15.3 7.7 L 11.7 7.7 Z M 13.7 3.3 C 13 3.5 12.2 3.7 11.1 3.8 C 10.9 2.8 10.4 1.6 9.7 0.9 C 11.2 1.2 12.6 2.1 13.7 3.3 Z M 6.3 0.9 C 5.6 1.6 5.1 2.8 4.9 3.8 C 4 3.7 3.2 3.6 2.3 3.3 C 3.4 2.1 4.8 1.2 6.3 0.9 Z M 2.3 12.7 C 3.2 12.4 4 12.3 4.9 12.2 C 5.1 13.2 5.6 14.4 6.3 15.1 C 4.8 14.8 3.4 13.9 2.3 12.7 Z M 9.7 15.1 C 10.4 14.4 10.9 13.2 11.1 12.2 C 12 12.3 12.9 12.4 13.7 12.7 C 12.6 13.9 11.2 14.8 9.7 15.1 Z"
               />
             </svg>
             <span
-              hx-get="/api/lang/switch"
+              hx-get="https://api.kmontocam.com/home/v1/language"
               id="active-language-iso"
-              hx-trigger="load, changeLanguage from:body"
+              hx-trigger="load, switch-language from:body"
             >
               EN
             </span>
             <ul
-              hx-get="/api/lang/switch"
+              hx-get="https://api.kmontocam.com/home/v1/language"
               id="nav-languages"
               ,
-              hx-trigger="load, changeLanguage from:body"
+              hx-trigger="load, switch-language from:body"
             >
               <li
-                hx-post="/api/lang"
-                hx-vals='{"lang": "en"}'
-                hx-ext="json-enc"
+                hx-post="https://api.kmontocam.com/home/v1/language/{code}"
+                hx-vals='{"code": "en"}'
                 hx-swap="none"
                 hx-trigger="click"
-                id="change-to-en"
+                id="switch-to-en"
                 onclick="changeDomLanguage('en-US'); toggleCollapsedMenu('toggle-menu')"
               >
                 <span> English </span>
               </li>
               <li
-                hx-post="/api/lang"
-                hx-vals='{"lang": "es"}'
-                hx-ext="json-enc"
+                hx-post="https://api.kmontocam.com/home/v1/language/{code}"
+                hx-vals='{"code": "es"}'
                 hx-swap="none"
                 hx-trigger="click"
-                id="change-to-es"
+                id="switch-to-es"
                 onclick="changeDomLanguage('es-LA'); toggleCollapsedMenu('toggle-menu')"
               >
                 <span> Spanish </span>
@@ -237,13 +232,13 @@
                 />
               </svg>
             </label>
-            <div class="menu" id="options-list">
+            <div class="menu" id="options-list" hx-ext="path-params">
               <ul>
                 <a href="#studies">
                   <li
-                    hx-get="/api/lang/switch"
+                    hx-get="https://api.kmontocam.com/home/v1/language"
                     id="nav-section-studies"
-                    hx-trigger="load, changeLanguage from:body"
+                    hx-trigger="load, switch-language from:body"
                     onclick="toggleCollapsedMenu('toggle-menu')"
                   >
                     Studies
@@ -251,9 +246,9 @@
                 </a>
                 <a href="#experience">
                   <li
-                    hx-get="/api/lang/switch"
+                    hx-get="https://api.kmontocam.com/home/v1/language"
                     id="nav-section-experience"
-                    hx-trigger="load, changeLanguage from:body"
+                    hx-trigger="load, switch-language from:body"
                     onclick="toggleCollapsedMenu('toggle-menu')"
                   >
                     Experience
@@ -261,9 +256,9 @@
                 </a>
                 <a href="#friends">
                   <li
-                    hx-get="/api/lang/switch"
+                    hx-get="https://api.kmontocam.com/home/v1/language"
                     id="nav-section-friends"
-                    hx-trigger="load, changeLanguage from:body"
+                    hx-trigger="load, switch-language from:body"
                     onclick="toggleCollapsedMenu('toggle-menu')"
                   >
                     Friends
@@ -271,22 +266,21 @@
                 </a>
               </ul>
               <span
-                hx-get="/api/lang/switch"
+                hx-get="https://api.kmontocam.com/home/v1/language"
                 id="nav-collapsed-title-language"
-                hx-trigger="load, changeLanguage from:body"
+                hx-trigger="load, switch-language from:body"
                 class="language-switch"
               >
                 Switch Language
               </span>
               <ul
-                hx-get="/api/lang/switch"
+                hx-get="https://api.kmontocam.com/home/v1/language"
                 id="nav-languages"
-                hx-trigger="load, changeLanguage from:body"
+                hx-trigger="load, switch-language from:body"
               >
                 <li
-                  hx-post="/api/lang"
-                  hx-vals='{"lang": "en"}'
-                  hx-ext="json-enc"
+                  hx-post="https://api.kmontocam.com/home/v1/language/{code}"
+                  hx-vals='{"code": "en"}'
                   hx-swap="none"
                   hx-trigger="click"
                   onclick="changeDomLanguage('es-US'); toggleCollapsedMenu('toggle-menu')"
@@ -294,9 +288,8 @@
                   <span> English </span>
                 </li>
                 <li
-                  hx-post="/api/lang"
-                  hx-vals='{"lang": "es"}'
-                  hx-ext="json-enc"
+                  hx-post="https://api.kmontocam.com/home/v1/language/{code}"
+                  hx-vals='{"code": "es"}'
                   hx-swap="none"
                   hx-trigger="click"
                   onclick="changeDomLanguage('es-LA'); toggleCollapsedMenu('toggle-menu')"
@@ -312,16 +305,16 @@
     <div class="main-body">
       <div class="home">
         <h1
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="home-heading"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           Hello, World!
         </h1>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="home-intro"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           I am <b>Kevin Montoya</b>, a college senior with a keen interest in
           <span class="underline-data">Data Applications</span>,
@@ -331,9 +324,9 @@
           a technological aspect captivates me.
         </p>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="home-outro"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           This is my personal web page. Initially was designed with the
           intention of serving as a portfolio, but as I worked on it, I decided
@@ -343,16 +336,16 @@
       </div>
       <div class="studies" id="studies">
         <h2
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="studies-heading"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           Academia
         </h2>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="studies-bs-intro"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           <span class="bs-title">
             B.S. in Data Science and Mathematics Engineering
@@ -374,9 +367,9 @@
           ></object>
         </div>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="studies-bs-description"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           At the home campus in the city of <b>Monterrey</b>, <b>Mexico</b>. I
           have been involved in several courses that cover a range of subjects,
@@ -385,9 +378,9 @@
           Cybersecurity.
         </p>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="studies-outro"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           I am deeply enthusiastic about learning, attending school is unique
           and I would love to keep expanding my academic profile, but I like it
@@ -396,9 +389,9 @@
       </div>
       <div class="experience" id="experience">
         <h2
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="experience-heading"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           The work I have done
         </h2>
@@ -410,9 +403,9 @@
               class="logo"
             ></object>
             <p
-              hx-get="/api/lang/switch"
+              hx-get="https://api.kmontocam.com/home/v1/language"
               id="experience-hey-description"
-              hx-trigger="load, changeLanguage from:body"
+              hx-trigger="load, switch-language from:body"
             >
               Since August 2023, I have been immersed in crafting infrastructure
               solutions for the Artificial Intelligence department. I designed
@@ -450,17 +443,17 @@
               class="logo"
             ></object>
             <p
-              hx-get="/api/lang/switch"
+              hx-get="https://api.kmontocam.com/home/v1/language"
               id="experience-cemex-intro"
-              hx-trigger="load, changeLanguage from:body"
+              hx-trigger="load, switch-language from:body"
             >
               From February to June 2023, I had to oportunity to participate in
               an internship with the Processes & IT department at Prague, CZ.
             </p>
             <p
-              hx-get="/api/lang/switch"
+              hx-get="https://api.kmontocam.com/home/v1/language"
               id="experience-cemex-description"
-              hx-trigger="load, changeLanguage from:body"
+              hx-trigger="load, switch-language from:body"
             >
               I was responsible of architecting and developing a new
               cross-selling engine for one of the company's business lines. I
@@ -493,9 +486,9 @@
               </a>
             </h3>
             <p
-              hx-get="/api/lang/switch"
+              hx-get="https://api.kmontocam.com/home/v1/language"
               id="experience-nvim-conda-description"
-              hx-trigger="load, changeLanguage from:body"
+              hx-trigger="load, switch-language from:body"
             >
               I could not deal with the fact that to change a conda environment
               inside Neovim I had to restart the editor. I wrote a plugin to
@@ -513,16 +506,16 @@
       </div>
       <div class="friends" id="friends">
         <h2
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="friends-heading"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           Company & Devotion
         </h2>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="friends-intro"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           This is a space for my friends. Today I am surrounded by incredible
           people who share kindness, passion and talent in what they do. Thank
@@ -581,9 +574,9 @@
           ></object>
         </div>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="friends-outro"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           There are some faces missing! I swear I will make them as soon as
           possible. I would also like to add my parents, but I am not sure if
@@ -592,16 +585,16 @@
       </div>
       <div class="end">
         <h2
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="end-heading"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           The end
         </h2>
         <p
-          hx-get="/api/lang/switch"
+          hx-get="https://api.kmontocam.com/home/v1/language"
           id="end-description"
-          hx-trigger="load, changeLanguage from:body"
+          hx-trigger="load, switch-language from:body"
         >
           Bye for now! Send me a postcard, drop me a line or contact me on the
           social addresses I listed below if you are interested in anything of
