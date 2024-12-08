@@ -10,10 +10,8 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "https://kmontocam.com, https://www.kmontocam.com"
     nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS"
-    nginx.ingress.kubernetes.io/cors-allow-headers: |
-      "Access-Control-Allow-Headers, Authorization, Content-Type, Cookie, HX-Boosted, HX-Current-URL, HX-History-Restore-Request, HX-Prompt, HX-Request, HX-Target, HX-Trigger-Name, HX-Trigger"
-    nginx.ingress.kubernetes.io/cors-expose-headers: |
-      "HX-Location, HX-Push-Url, HX-Redirect, HX-Refresh, HX-Replace-Url, HX-Reswap, HX-Retarget, HX-Reselect, HX-Trigger, HX-Trigger-After-Settle, HX-Trigger-After-Swap"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Access-Control-Allow-Headers, Authorization, Content-Type, Cookie, HX-Boosted, HX-Current-URL, HX-History-Restore-Request, HX-Prompt, HX-Request, HX-Target, HX-Trigger-Name, HX-Trigger"
+    nginx.ingress.kubernetes.io/cors-expose-headers: "HX-Location, HX-Push-Url, HX-Redirect, HX-Refresh, HX-Replace-Url, HX-Reswap, HX-Retarget, HX-Reselect, HX-Trigger, HX-Trigger-After-Settle, HX-Trigger-After-Swap"
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true" # allow cookies
     nginx.ingress.kubernetes.io/cors-max-age: "3600"
   name: kmontocam-backend
