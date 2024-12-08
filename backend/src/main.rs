@@ -1,5 +1,5 @@
 mod postgres;
-use crate::postgres::models::home::Translations;
+use crate::postgres::models::home::LanguageSwitch;
 use axum::body::Body;
 use axum::extract::State;
 use axum::http::HeaderValue;
@@ -27,42 +27,42 @@ use axum_extra::extract::cookie::{Cookie, CookieJar};
 
 /// Hook to trigger a language switch in the document
 async fn trigger_language_switch(Path(code): Path<String>) -> impl IntoResponse {
-    let trigger = AppendHeaders([("HX-Trigger", "change-language")]);
+    let trigger = AppendHeaders([("HX-Trigger", "switch-language")]);
     let cookies = AppendHeaders([(SET_COOKIE, format!("LANG={}", code))]);
     return (trigger, cookies);
 }
 
-/// Event to translate the content of the document, triggered by `HTMX-Trigger: changeLanguage`
+/// Event to translate the content of the document, triggered by `HX-Trigger: switch-language`
 /// TODO: create span for the translation in order to include method and path in the response log
 async fn language_switch(
     State(state): State<AppState>,
     jar: CookieJar,
     headers: HeaderMap,
 ) -> String {
-    let active_language: String = jar
+    let desired_language: String = jar
         .get("LANG")
         .unwrap_or(&Cookie::new("LANG", "en"))
         .value()
         .to_string();
 
-    let translation_key: String = headers
+    let html_id: String = headers
         .get("HX-Trigger")
         .unwrap_or(&HeaderValue::from_str("").unwrap())
         .to_str()
         .unwrap()
         .to_string();
 
-    let translation = sqlx::query_file_as!(
-        Translations,
+    let switch = sqlx::query_file_as!(
+        LanguageSwitch,
         "src/postgres/queries/language_switch.sql",
-        LanguageCode::from_str(&active_language).unwrap_or_default() as LanguageCode,
-        translation_key
+        LanguageCode::from_str(&desired_language).unwrap_or_default() as LanguageCode,
+        html_id
     )
     .fetch_one(&state.pool)
     .await
     .unwrap_or_default();
 
-    return translation.content;
+    return switch.content;
 }
 
 #[derive(Clone)]

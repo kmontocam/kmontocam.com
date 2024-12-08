@@ -10,7 +10,7 @@ pub enum LanguageCode {
 }
 
 #[derive(FromRow, Default)]
-pub struct Translations {
+pub struct LanguageSwitch {
     pub content: String,
 }
 
