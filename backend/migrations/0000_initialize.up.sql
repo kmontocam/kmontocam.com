@@ -10,12 +10,12 @@ END $$;
 CREATE TABLE IF NOT EXISTS "home"."translations" (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
   language_code translations_language_code NOT NULL,
-  section VARCHAR NOT NULL,
+  html_id VARCHAR NOT NULL,
   content VARCHAR NOT NULL
 );
 
 INSERT INTO
-  "home"."translations" (language_code, section, content)
+  "home"."translations" (language_code, html_id, content)
 VALUES
   ('en', 'nav-section-studies', 'Studies'),
   ('en', 'nav-section-experience', 'Experience'),

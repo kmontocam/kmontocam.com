@@ -4,4 +4,4 @@ FROM
   "home"."translations"
 WHERE
   language_code = $1
-  AND section = $2;
+  AND html_id = $2;
