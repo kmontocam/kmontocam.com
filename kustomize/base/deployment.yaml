@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: kmontocam
+  name: kmontocam-backend
+  labels:
+    app: kmontocam-backend
+spec:
+  selector:
+    matchLabels:
+      app: kmontocam-backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kmontocam-backend
+    spec:
+      containers:
+        - name: axum
+          image: ghcr.io/kmontocam/kmontocam-backend:latest
+          imagePullPolicy: Always
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kmontocam-backend
+                  key: DATABASE_URL
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 50m
+            limits:
+              memory: 64Mi
+              cpu: 100m
+      nodeSelector:
+        kubernetes.io/os: linux
