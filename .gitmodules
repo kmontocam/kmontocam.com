@@ -1,6 +1,6 @@
 [submodule "backend"]
 	path = backend
-	url = git@github:kmontocam/kmontocam.com-backend.git
+	url = git@github.com:kmontocam/kmontocam.com-backend.git
 [submodule "frontend"]
 	path = frontend
-	url = git@github:kmontocam/kmontocam.com-frontend.git
+	url = git@github.com:kmontocam/kmontocam.com-frontend.git
