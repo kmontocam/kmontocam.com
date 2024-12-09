@@ -1,0 +1,386 @@
+# helm install jenkins-operator jenkins-operator --repo https://raw.githubusercontent.com/jenkinsci/kubernetes-operator/master/chart --version 0.8.1 --values ./helm/prod/jenkins/jenkins-operator/values.yaml -n jenkins --create-namespace
+#
+# Jenkins Operator Helm chart
+
+# Jenkins instance configuration
+jenkins:
+  # enabled can enable or disable the Jenkins instance
+  # Set to false if you have configured CR already and/or you want to deploy an operator only
+  enabled: true
+
+  # apiVersion is the version of the CR manifest
+  # The recommended and default value is "jenkins.io/v1alpha2"
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/v0.1.x/migration-guide-v1alpha1-to-v1alpha2/ for more migration guide
+  apiVersion: jenkins.io/v1alpha2
+
+  # name of resource
+  # The pod name will be jenkins-<name> (name will be set as suffix)
+  name: jenkins
+
+  # namespace is the namespace where the resources will be deployed
+  # It's not recommended to use default namespace
+  # Create new namespace for jenkins (called e.g. jenkins)
+  # Note: this affects roles and rolebindings for jenkins operator itself
+  namespace: jenkins
+
+  # labels are injected into metadata labels field
+  labels:
+    devops.kmontocam.com: "true"
+
+  # nodeSelector are injected into metadata nodeSelector field
+  nodeSelector:
+    kubernetes.io/os: linux
+
+  # tolerations are injected into metadata tolerations field
+  tolerations: []
+
+  # annotations are injected into metadata annotations field
+  annotations: {}
+
+  # image is the name (and tag) of the Jenkins instance
+  # Default: jenkins/jenkins:lts
+  # It's recommended to use LTS (tag: "lts") version
+  image: jenkins/jenkins:2.452.2-lts
+
+  # env contains jenkins container environment variables
+  env:
+    - name: JENKINS_URL
+      value: devops.kmontocam.com/jenkins
+    - name: JENKINS_OPTS
+      value: --prefix=/jenkins
+    - name: JENKINS_HOME
+      value: /mnt/jenkins-server-home/
+
+  # imagePullPolicy defines policy for pulling images
+  imagePullPolicy: Always
+
+  # priorityClassName indicates the importance of a Pod relative to other Pods
+  # See: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+  priorityClassName: ""
+
+  # disableCSRFProtection can enable or disable operator built-in CSRF protection
+  # Set it to true if you are using OpenShift Jenkins Plugin
+  # See https://github.com/jenkinsci/kubernetes-operator/pull/193 for more info
+  disableCSRFProtection: false
+
+  # adding entries to a pod's /etc/hosts file provides pod-level override of hostname
+  # resolution when DNS and other options are not applicable.
+  hostAliases: {}
+  # - ip: "127.0.0.1"
+  #   hostnames:
+  #   - "foo.local"
+  #   - "bar.local"
+  # - ip: "10.1.2.3"
+  #   hostnames:
+  #   - "foo.remote"
+  #   - "bar.remote"
+
+  # Optional duration in seconds the pod needs to terminate gracefully.
+  # Default 30sec
+  terminationGracePeriodSeconds: 30
+
+  # validateSecurityWarnings enables or disables validating potential security warnings in Jenkins plugins via admission webhooks.
+  validateSecurityWarnings: false
+
+  # imagePullSecrets is used if you want to pull images from private repository
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/configuration/#pulling-docker-images-from-private-repositories for more info
+  imagePullSecrets: []
+
+  # notifications is feature that notify user about Jenkins reconciliation status
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/notifications/ for more info
+  notifications: []
+
+  # Enables customization of the Service Account attached to the master Jenkins instance via annotations
+  # https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/schema/#github.com/jenkinsci/kubernetes-operator/api/v1alpha2.ServiceAccount
+  serviceAccount:
+    annotations: {}
+
+  # basePlugins are plugins installed and required by the operator
+  # Shouldn't contain plugins defined by user
+  # You can change their versions here
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/customization/#install-plugins for more details
+  #
+  # Example:
+  #
+  basePlugins:
+  - name: kubernetes
+    version: 4246.v5a_12b_1fe120e
+  - name: workflow-job
+    version: 1400.v7fd111b_ec82f
+  - name: workflow-aggregator
+    version: 600.vb_57cdd26fdd7 # NOTE: modified
+  - name: git
+    version: 5.2.2
+  - name: job-dsl
+    version: "1.87"
+  - name: configuration-as-code
+    version: 1810.v9b_c30a_249a_4c
+  - name: kubernetes-credentials-provider
+    version: 1.262.v2670ef7ea_0c5
+  - name: pipeline-model-extensions
+    version: "2.2218.v56d0cda_37c72"
+  - name: pipeline-model-definition
+    version: 2.2218.v56d0cda_37c72
+
+  # basePlugins: []
+
+  # plugins are plugins required by the user
+  # You can define plugins here
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/customization/#install-plugins for more details
+  #
+  # Example:
+  #
+  # plugins:
+  # - name: simple-theme-plugin
+  #   version: "0.6"
+  plugins: []
+
+  # latestPlugins: Allow to override jenkins-plugin-cli default behavior
+  # while downloading the plugin and dependencies
+  # see: https://github.com/jenkinsci/plugin-installation-manager-tool#cli-options
+  # default to true
+  # NOTE: enabling it causes error as of 2024-12-04
+  latestPlugins: false
+
+  # seedJobs is placeholder for jenkins seed jobs
+  # For seed job creation tutorial, check https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/configuring-seed-jobs-and-pipelines/
+  # Example:
+  #
+  # seedJobs:
+  #  - id: jenkins-operator
+  #    targets: "cicd/jobs/*.jenkins"
+  #    description: "Jenkins Operator repository"
+  #    repositoryBranch: master
+  #    repositoryUrl: https://github.com/jenkinsci/kubernetes-operator.git
+  seedJobs: []
+
+  # SeedJobAgentImage defines the image that will be used by the seed job agent. If not defined jenkins/inbound-agent:3248.v65ecb_254c298-6 will be used.
+  seedJobAgentImage: ""
+
+  # Resource limit/request for Jenkins
+  # See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/ for details
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 500Mi
+
+  # volumes used by Jenkins
+  # By default, we are only using backup
+  volumes:
+    # - name: backup # PVC volume where backups will be stored
+    #   persistentVolumeClaim:
+    #     claimName: jenkins-backup
+    - name: jenkins-server-home
+      persistentVolumeClaim:
+        claimName: usb-sdb5
+
+  volumeMounts:
+    - mountPath: /mnt/jenkins-server-home
+      name: jenkins-server-home
+
+  # volumeMounts are mounts for Jenkins pod
+  # Note that attempting to overwrite default mount settings for restricted,
+  # non-configurable volumeMounts will result in Operator error
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/installation/#note-on-restricted-jenkins-controller-pod-volumemounts for details
+  volumeMounts: []
+
+  # defines authorization strategy of the operator for the Jenkins API
+  authorizationStrategy: createUser
+
+  # securityContext for pod
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 1000
+
+  # http Jenkins service
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/schema/#github.com/jenkinsci/kubernetes-operator/pkg/apis/jenkins/v1alpha2.Service for details
+  #service:
+  # slave Jenkins service
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/schema/#github.com/jenkinsci/kubernetes-operator/pkg/apis/jenkins/v1alpha2.Service for details
+  #slaveService:
+
+  # LivenessProbe for Jenkins Master pod
+  livenessProbe:
+    failureThreshold: 20
+    httpGet:
+      path: /login
+      port: http
+      scheme: HTTP
+    initialDelaySeconds: 100
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 8
+  # ReadinessProbe for Jenkins Master pod
+  readinessProbe:
+    failureThreshold: 60
+    httpGet:
+      path: /login
+      port: http
+      scheme: HTTP
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 8
+
+  # backup is section for configuring operator's backup feature
+  # By default backup feature is enabled and pre-configured
+  # This section simplifies the configuration described here: https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/configure-backup-and-restore/
+  # For customization tips see https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/custom-backup-and-restore/
+  backup:
+    # enabled is enable/disable switch for backup feature
+    # By default the feature is enabled
+    enabled: false
+
+    # image used by backup feature
+    # By default using prebuilt backup PVC image
+    image: quay.io/jenkins-kubernetes-operator/backup-pvc:v0.4.1
+
+    # containerName is backup container name
+    containerName: backup
+
+    # interval defines how often make backup in seconds
+    interval: 30
+
+    # makeBackupBeforePodDeletion when enabled will make backup before pod deletion
+    makeBackupBeforePodDeletion: true
+
+    # backupCommand is backup container command
+    backupCommand:
+      - /home/user/bin/backup.sh
+
+    # restoreCommand is backup restore command
+    restoreCommand:
+      - /home/user/bin/restore.sh
+
+    getLatestAction:
+      - /home/user/bin/get-latest.sh
+
+    # pvc is Persistent Volume Claim Kubernetes resource
+    pvc:
+      # enabled is enable/disable switch for PVC
+      enabled: false
+
+      # size is size of PVC
+      size: 5Gi
+
+      # className is storageClassName for PVC
+      # See https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1 for more details
+      className: ""
+
+    # resources used by backup container
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 500Mi
+
+    # env contains container environment variables
+    # PVC backup provider handles these variables:
+    # BACKUP_DIR - path for storing backup files (default: "/backup")
+    # JENKINS_HOME - path to jenkins home (default: "/jenkins-home")
+    # BACKUP_COUNT - define how much recent backups will be kept
+    # Optional in case you want to modify the backup and restore retry logic
+    # BACKUP_RETRY_COUNT
+    # BACKUP_RETRY_INTERVAL
+    # RESTORE_RETRY_COUNT
+    # RESTORE_RETRY_INTERVAL
+    env:
+      - name: BACKUP_DIR
+        value: /backup
+      - name: JENKINS_HOME
+        value: /jenkins-home
+      - name: BACKUP_COUNT
+        value: "3" # keep only the 3 most recent backups
+      #- name: BACKUP_RETRY_COUNT
+      #  value: "3"
+      #- name: BACKUP_RETRY_INTERVAL
+      #  value: "60"
+      #- name: RESTORE_RETRY_COUNT
+      #  value: "10"
+      #- name: RESTORE_RETRY_INTERVAL
+      #  value: "10"
+
+    # volumeMounts holds the mount points for volumes
+    volumeMounts:
+      - name: jenkins-home
+        mountPath: /jenkins-home # Jenkins home volume
+      - mountPath: /backup # backup volume
+        name: backup
+
+  # configuration is section where we can configure Jenkins instance
+  # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/customization/ for details
+  configuration:
+    configurationAsCode: []
+    #    - configMapName: jenkins-casc
+    #      content: {}
+    groovyScripts: []
+    #    - configMapName: jenkins-gs
+    #      content: {}
+
+    # secretRefName of existing secret (previously created)
+    secretRefName: ""
+
+    # secretData creates new secret if secretRefName is empty and fills with data provided in secretData
+    secretData: {}
+
+# operator is section for configuring operator deployment
+operator:
+  replicaCount: 1
+
+  # image is the name (and tag) of the Jenkins Operator image
+  image: quay.io/jenkins-kubernetes-operator/operator:v0.8.1
+
+  # imagePullPolicy defines policy for pulling images
+  imagePullPolicy: IfNotPresent
+
+  # imagePullSecrets is used if you want to pull images from private repository
+  imagePullSecrets: []
+
+  # nameOverride overrides the app name
+  nameOverride: ""
+
+  # fullnameOverride overrides the deployment name
+  fullnameOverride: ""
+
+  # Select a different namespace to look for the Jenkins CR and deploy Jenkins in. Defaults to the same namespace as
+  # the operator.
+  # watchNamespace: "jenkins-namespace"
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 250Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  labels:
+    devops.kmontocam.com: "true"
+  tolerations: []
+  affinity: {}
+
+webhook:
+  # TLS certificates for webhook
+  certificate:
+    name: webhook-certificate
+
+    # validity of the certificate
+    duration: 2160h
+
+    # time after which the certificate will be automatically renewed
+    renewbefore: 360h
+  # enable or disable the validation webhook
+  enabled: false
+
+cert-manager:
+  # cert-manager is required to generate certificates for webhook. If you don't have cert-manager installed in your cluster,
+  # you can install it as a subordinate chart
+  enabled: false
+  # This startupapicheck is a Helm post-install hook that waits for the webhook
+  # endpoints to become available.
+  startupapicheck:
+    enabled: false
