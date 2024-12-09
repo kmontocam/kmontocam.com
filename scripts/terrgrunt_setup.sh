@@ -1,0 +1,2 @@
+export TERRAGRUNT_PROVIDER_CACHE=1
+export CLOUDFLARE_API_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
