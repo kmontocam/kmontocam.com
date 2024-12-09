@@ -1,0 +1,8 @@
+# NOTE: requires manual installation of cloudflare-operator: https://github.com/adyanth/cloudflare-operator
+# kubectl apply -k https://github.com/adyanth/cloudflare-operator/config/default
+# NOTE: requires creation of kmontocam namespace defined in kmontocam.com-backend-infra
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./tunnel.yaml
+  - ./ddclient.yaml

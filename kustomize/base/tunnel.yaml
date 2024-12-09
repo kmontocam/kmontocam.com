@@ -1,0 +1,62 @@
+apiVersion: v1 # TODO: move namespace declaration from pv's
+kind: Namespace
+metadata:
+  name: cloudflare-operator-system
+  labels:
+    api.kmontocam.com: "true"
+    devops.kmontocam.com: "true"
+---
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: ClusterTunnel
+metadata:
+  name: rpi5-k3s-cluster
+  namespace: cloudflare-operator-system
+  labels:
+    api.kmontocam.com: "true"
+    devops.kmontocam.com: "true"
+spec:
+  newTunnel:
+    name: rpi5-k3s-cluster
+  size: 1
+  cloudflare:
+    email: kmontocam@outlook.com
+    domain: kmontocam.com
+    secret: cloudflare-kmontocam-api
+    accountName: kmontocam
+    accountId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+---
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: rpi5-k3s-ingress-api
+  namespace: ingress-nginx
+  labels:
+    api.kmontocam.com: "true"
+subjects:
+  - name: api
+    spec:
+      fqdn: api.kmontocam.com
+      protocol: http
+      target: http://ingress-nginx-controller.ingress-nginx.svc.cluster.local:80
+tunnelRef:
+  kind: ClusterTunnel
+  name: rpi5-k3s-cluster
+  disableDNSUpdates: false
+---
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: rpi5-k3s-ingress-devops
+  namespace: ingress-nginx
+  labels:
+    devops.kmontocam.com: "true"
+subjects:
+  - name: devops
+    spec:
+      fqdn: devops.kmontocam.com
+      protocol: http
+      target: http://ingress-nginx-controller.ingress-nginx.svc.cluster.local:80
+tunnelRef:
+  kind: ClusterTunnel
+  name: rpi5-k3s-cluster
+  disableDNSUpdates: false
