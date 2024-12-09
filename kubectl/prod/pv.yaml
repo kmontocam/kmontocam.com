@@ -1,0 +1,141 @@
+apiVersion: v1 # TODO: move namespace declaration from pv's
+kind: Namespace
+metadata:
+  name: jenkins
+  labels:
+    devops.kmontocam.com: "true"
+    devops.kmontocam.com/service: jenkins
+    kmontocam.com/environment: prod
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    devops.kmontocam.com: "true"
+    kmontocam.com/environment: prod
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: usb-sdb1
+  labels:
+    api.kmontocam.com: "true"
+    api.kmontocam.com: cnpg
+    kmontocam.com/environment: prod
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /mnt/usb-sdb1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: usb-sdb2
+  labels:
+    devops.kmontocam.com: "true"
+    devops.kmontocam.com/service: prometheus
+    kmontocam.com/environment: prod
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /mnt/usb-sdb2
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: usb-sdb3
+  labels:
+    devops.kmontocam.com: "true"
+    kmontocam.com/environment: prod
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /mnt/usb-sdb3
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: usb-sdb5
+  labels:
+    devops.kmontocam.com: "true"
+    devops.kmontocam.com/service: jenkins
+    kmontocam.com/environment: prod
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /mnt/usb-sdb5
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: usb-sdb5
+  namespace: jenkins
+  labels:
+    devops.kmontocam.com: "true"
+    devops.kmontocam.com/service: jenkins
+    kmontocam.com/environment: prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  volumeName: usb-sdb5
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: usb-sdb6
+  labels:
+    devops.kmontocam.com: "true"
+    devops.kmontocam.com/service: grafana
+    kmontocam.com/environment: prod
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /mnt/usb-sdb6
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: usb-sdb6
+  namespace: monitoring
+  labels:
+    devops.kmontocam.com: "true"
+    devops.kmontocam.com/service: grafana
+    kmontocam.com/environment: prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  volumeName: usb-sdb6
+  storageClassName: local-path
