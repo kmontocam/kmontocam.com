@@ -48,8 +48,6 @@ jenkins:
       value: devops.kmontocam.com/jenkins
     - name: JENKINS_OPTS
       value: --prefix=/jenkins
-    - name: JENKINS_HOME
-      value: /mnt/jenkins-server-home/
 
   # imagePullPolicy defines policy for pulling images
   imagePullPolicy: Always
@@ -103,24 +101,24 @@ jenkins:
   # Example:
   #
   basePlugins:
-  - name: kubernetes
-    version: 4246.v5a_12b_1fe120e
-  - name: workflow-job
-    version: 1400.v7fd111b_ec82f
-  - name: workflow-aggregator
-    version: 600.vb_57cdd26fdd7 # NOTE: modified
-  - name: git
-    version: 5.2.2
-  - name: job-dsl
-    version: "1.87"
-  - name: configuration-as-code
-    version: 1810.v9b_c30a_249a_4c
-  - name: kubernetes-credentials-provider
-    version: 1.262.v2670ef7ea_0c5
-  - name: pipeline-model-extensions
-    version: "2.2218.v56d0cda_37c72"
-  - name: pipeline-model-definition
-    version: 2.2218.v56d0cda_37c72
+    - name: kubernetes
+      version: 4246.v5a_12b_1fe120e
+    - name: workflow-job
+      version: 1400.v7fd111b_ec82f
+    - name: workflow-aggregator
+      version: 600.vb_57cdd26fdd7 # NOTE: modified
+    - name: git
+      version: 5.2.2
+    - name: job-dsl
+      version: "1.87"
+    - name: configuration-as-code
+      version: 1810.v9b_c30a_249a_4c
+    - name: kubernetes-credentials-provider
+      version: 1.262.v2670ef7ea_0c5
+    - name: pipeline-model-extensions
+      version: "2.2218.v56d0cda_37c72"
+    - name: pipeline-model-definition
+      version: 2.2218.v56d0cda_37c72
 
   # basePlugins: []
 
@@ -170,22 +168,14 @@ jenkins:
   # volumes used by Jenkins
   # By default, we are only using backup
   volumes:
-    # - name: backup # PVC volume where backups will be stored
-    #   persistentVolumeClaim:
-    #     claimName: jenkins-backup
-    - name: jenkins-server-home
+    - name: backup
       persistentVolumeClaim:
         claimName: usb-sdb5
-
-  volumeMounts:
-    - mountPath: /mnt/jenkins-server-home
-      name: jenkins-server-home
 
   # volumeMounts are mounts for Jenkins pod
   # Note that attempting to overwrite default mount settings for restricted,
   # non-configurable volumeMounts will result in Operator error
   # See https://jenkinsci.github.io/kubernetes-operator/docs/installation/#note-on-restricted-jenkins-controller-pod-volumemounts for details
-  volumeMounts: []
 
   # defines authorization strategy of the operator for the Jenkins API
   authorizationStrategy: createUser
@@ -232,11 +222,12 @@ jenkins:
   backup:
     # enabled is enable/disable switch for backup feature
     # By default the feature is enabled
-    enabled: false
+    enabled: true
 
     # image used by backup feature
     # By default using prebuilt backup PVC image
-    image: quay.io/jenkins-kubernetes-operator/backup-pvc:v0.4.1
+    # NOTE: required custom setting platform as linux/arm64
+    image: ghcr.io/kmontocam/jenkins-kubernetes-operator/backup-pvc:v0.4.1
 
     # containerName is backup container name
     containerName: backup
@@ -261,23 +252,23 @@ jenkins:
     # pvc is Persistent Volume Claim Kubernetes resource
     pvc:
       # enabled is enable/disable switch for PVC
-      enabled: false
+      enabled: true
 
       # size is size of PVC
-      size: 5Gi
+      size: 4Gi
 
       # className is storageClassName for PVC
       # See https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1 for more details
-      className: ""
+      className: "local-path"
 
     # resources used by backup container
     resources:
       limits:
-        cpu: 1000m
-        memory: 2Gi
+        cpu: 200m
+        memory: 400Mi
       requests:
         cpu: 100m
-        memory: 500Mi
+        memory: 200Mi
 
     # env contains container environment variables
     # PVC backup provider handles these variables:
