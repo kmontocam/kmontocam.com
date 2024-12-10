@@ -315,9 +315,179 @@ jenkins:
   # configuration is section where we can configure Jenkins instance
   # See https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/customization/ for details
   configuration:
-    configurationAsCode: []
-    #    - configMapName: jenkins-casc
-    #      content: {}
+    configurationAsCode:
+      - configMapName: jenkins-casc
+        content:
+          jenkins.yaml: |
+            jenkins:
+              agentProtocols:
+                - "JNLP4-connect"
+                - "Ping"
+              authorizationStrategy:
+                loggedInUsersCanDoAnything:
+                  allowAnonymousRead: false
+              clouds:
+                - kubernetes:
+                    jenkinsTunnel: "jenkins-operator-slave-jenkins.jenkins.svc.cluster.local:50000"
+                    jenkinsUrl: "http://jenkins-operator-http-jenkins.jenkins.svc.cluster.local:8080/jenkins"
+                    name: "kubernetes"
+                    namespace: "jenkins"
+                    retentionTimeout: 15
+                    serverUrl: "https://kubernetes.default.svc.cluster.local:443"
+                    templates:
+                      - name: default
+                        namespace: jenkins
+                        nodeUsageMode: NORMAL
+                        yaml: |
+                          apiVersion: "v1"
+                          kind: "Pod"
+                          metadata:
+                            annotations:
+                              devops.kmontocam.com: "true"
+                              devops.kmontocam.com/cicd: "true"
+                              kmontocam.com/service: jenkins
+                              kmontocam.com/environment: prod
+                            namespace: jenkins
+                            name: default
+                          spec:
+                            hostNetwork: false
+                            nodeSelector:
+                              kubernetes.io/os: linux
+                            restartPolicy: "Never"
+              crumbIssuer:
+                standard:
+                  excludeClientIPFromCrumb: false
+              disableRememberMe: false
+                globalNodeProperties:
+                - envVars:
+                    env:
+                      - key: TZ
+                        value: "America/Monterrey"
+              labelAtoms:
+                - name: "built-in"
+              markupFormatter: "plainText"
+              mode: EXCLUSIVE
+              myViewsTabBar: "standard"
+              noUsageStatistics: true
+              nodeMonitors:
+                - "architecture"
+                - "clock"
+                - diskSpace:
+                    freeSpaceThreshold: "1GiB"
+                    freeSpaceWarningThreshold: "2GiB"
+                - "swapSpace"
+                - tmpSpace:
+                    freeSpaceThreshold: "1GiB"
+                    freeSpaceWarningThreshold: "2GiB"
+                - "responseTime"
+              numExecutors: 0
+              primaryView:
+                all:
+                  name: "all"
+              projectNamingStrategy: "standard"
+              quietPeriod: 5
+              remotingSecurity:
+                enabled: true
+              scmCheckoutRetryCount: 0
+              securityRealm:
+                local:
+                  allowsSignup: false
+                  enableCaptcha: false
+                  users:
+                    - id: "jenkins-operator"
+                      name: "jenkins-operator"
+                      properties:
+                        - "apiToken"
+                        - "consoleUrlProvider"
+                        - "mailer"
+                        - "myView"
+                        - preferredProvider:
+                            providerId: "default"
+                        - "timezone"
+                        - "experimentalFlags"
+              slaveAgentPort: 50000
+              updateCenter:
+                sites:
+                  - id: "default"
+                    url: "https://updates.jenkins.io/update-center.json"
+              views:
+                - all:
+                    name: "all"
+                - list:
+                    columns:
+                      - "status"
+                      - "weather"
+                      - "jobName"
+                      - "lastSuccess"
+                      - "lastFailure"
+                      - "lastDuration"
+                      - "buildButton"
+                    includeRegex: "((?!seed)(?!jenkins).)*"
+                    name: "non-seed-jobs"
+                - list:
+                    columns:
+                      - "status"
+                      - "weather"
+                      - "jobName"
+                      - "lastSuccess"
+                      - "lastFailure"
+                      - "lastDuration"
+                      - "buildButton"
+                    includeRegex: ".*job-dsl-seed.*"
+                    name: "seed-jobs"
+              viewsTabBar: "standard"
+            globalCredentialsConfiguration:
+              configuration:
+                providerFilter: "none"
+                typeFilter: "none"
+            appearance:
+              prism:
+                theme: PRISM
+            security:
+              apiToken:
+                creationOfLegacyTokenEnabled: false
+                tokenGenerationOnCreationEnabled: false
+                usageStatisticsEnabled: true
+              cps:
+                hideSandbox: false
+              gitHooks:
+                allowedOnAgents: false
+                allowedOnController: false
+              gitHostKeyVerificationConfiguration:
+                sshHostKeyVerificationStrategy: "knownHostsFileVerificationStrategy"
+              globalJobDslSecurityConfiguration:
+                useScriptSecurity: false
+            unclassified:
+              buildDiscarders:
+                configuredBuildDiscarders:
+                  - "jobBuildDiscarder"
+              fingerprints:
+                fingerprintCleanupDisabled: false
+                storage: "file"
+              location:
+                adminAddress: "address not configured yet <nobody@nowhere>"
+              mailer:
+                charset: "UTF-8"
+                useSsl: false
+                useTls: false
+              pollSCM:
+                pollingThreadCount: 10
+              scmGit:
+                addGitTagAction: false
+                allowSecondFetch: false
+                createAccountBasedOnEmail: false
+                disableGitToolChooser: false
+                hideCredentials: false
+                showEntireCommitSummaryInChanges: false
+                useExistingAccountWithSameEmail: false
+            tool:
+              git:
+                installations:
+                  - home: "git"
+                    name: "Default"
+              mavenGlobalConfig:
+                globalSettingsProvider: "standard"
+                settingsProvider: "standard"
     groovyScripts: []
     #    - configMapName: jenkins-gs
     #      content: {}
