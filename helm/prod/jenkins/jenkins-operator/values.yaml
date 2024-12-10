@@ -356,11 +356,11 @@ jenkins:
                 standard:
                   excludeClientIPFromCrumb: false
               disableRememberMe: false
-                globalNodeProperties:
-                - envVars:
-                    env:
-                      - key: TZ
-                        value: "America/Monterrey"
+              globalNodeProperties:
+              - envVars:
+                  env:
+                    - key: TZ
+                      value: "America/Monterrey"
               labelAtoms:
                 - name: "built-in"
               markupFormatter: "plainText"
