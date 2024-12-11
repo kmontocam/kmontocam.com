@@ -48,6 +48,8 @@ jenkins:
       value: devops.kmontocam.com/jenkins
     - name: JENKINS_OPTS
       value: --prefix=/jenkins
+    - name: JAVA_OPTS
+      value: "-XX:MinRAMPercentage=50.0 -XX:MaxRAMPercentage=80.0 -Djenkins.install.runSetupWizard=false -Djava.awt.headless=true -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Monterrey -Duser.timezone=America/Monterrey"
 
   # imagePullPolicy defines policy for pulling images
   imagePullPolicy: Always
@@ -156,8 +158,13 @@ jenkins:
     - id: job-dsl-seed-kmontocam.com
       targets: "cicd/jobs/*.groovy"
       description: "kmontocam.com Infrastructure"
-      repositoryBranch: develop # TODO: move to main branch
+      repositoryBranch: main
       repositoryUrl: https://github.com/kmontocam/kmontocam.com.git
+    - id: job-dsl-seed-kmontocam.com-backend
+      targets: "cicd/jobs/*.groovy"
+      description: "kmontocam.com backend multibranch pipeline"
+      repositoryBranch: main
+      repositoryUrl: https://github.com/kmontocam/kmontocam.com-backend.git
 
   # SeedJobAgentImage defines the image that will be used by the seed job agent. If not defined jenkins/inbound-agent:3248.v65ecb_254c298-6 will be used.
   seedJobAgentImage: ""
