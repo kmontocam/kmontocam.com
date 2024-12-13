@@ -50,6 +50,21 @@ jenkins:
       value: --prefix=/jenkins
     - name: JAVA_OPTS
       value: "-XX:MinRAMPercentage=50.0 -XX:MaxRAMPercentage=80.0 -Djenkins.install.runSetupWizard=false -Djava.awt.headless=true -Dorg.apache.commons.jelly.tags.fmt.timeZone=America/Monterrey -Duser.timezone=America/Monterrey"
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: jenkins-conf
+          key: DATABASE_URL
+    - name: GHCR_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: jenkins-conf
+          key: GHCR_TOKEN
+    - name: AWS_CREDENTIALS
+      valueFrom:
+        secretKeyRef:
+          name: jenkins-conf
+          key: AWS_CREDENTIALS
 
   # imagePullPolicy defines policy for pulling images
   imagePullPolicy: Always
@@ -323,7 +338,27 @@ jenkins:
     configurationAsCode:
       - configMapName: jenkins-casc
         content:
+          # NOTE: consider setting credentials using kubernetesCredentialProvider
           jenkins.yaml: |
+            credentials:
+              system:
+                domainCredentials:
+                  - credentials:
+                      - string:
+                          scope: GLOBAL
+                          id: "b8dc1ddf-5c3c-4e56-94d4-5c234db34e09"
+                          description: "Connection string to local postgres instance"
+                          secret: "${DATABASE_URL}"
+                      - string:
+                          scope: GLOBAL
+                          id: "d2ebee8c-fe21-4ca9-a935-a2b70c336b5b"
+                          description: "Github Container Registry token with read/write permissions"
+                          secret: "${GHCR_TOKEN}"
+                      - string:
+                          scope: GLOBAL
+                          id: "c4fa69ed-90d4-4a9d-9560-d1fd2b271d32"
+                          description: "Json parsable credentials with permissions to modify s3 buckets"
+                          secret: "${AWS_CREDENTIALS}"
             jenkins:
               agentProtocols:
                 - "JNLP4-connect"

@@ -18,5 +18,9 @@ secretGenerator:
     namespace: kmontocam
     envs:
       - .env.ddclient # must include password
+  - name: jenkins-conf
+    namespace: jenkins
+    envs:
+      - .env.jenkins # must include DATBASE_URL, GHCR_TOKEN, AWS_CREDENTIALS
 generatorOptions:
   disableNameSuffixHash: true
