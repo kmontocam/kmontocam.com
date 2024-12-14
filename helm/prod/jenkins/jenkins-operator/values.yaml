@@ -148,7 +148,9 @@ jenkins:
   # plugins:
   # - name: simple-theme-plugin
   #   version: "0.6"
-  plugins: []
+  plugins:
+    - name: pipeline-utility-steps
+      version: "2.18.0"
 
   # latestPlugins: Allow to override jenkins-plugin-cli default behavior
   # while downloading the plugin and dependencies
