@@ -53,6 +53,7 @@ controller:
   config:
     log-format-upstream: 'ts="$time_iso8601"
       host="$host"
+      remote_addr="$remote_addr"
       method="$request_method"
       path="$uri"
       status="$status"
@@ -60,10 +61,9 @@ controller:
       request_query="$args"
       request_length="$request_length"
       request_time="$request_time"
-      remote_user="$remote_user"
-      remote_addr="$proxy_protocol_addr"
       bytes_sent="$bytes_sent"
       http_referrer="$http_referer"
+      proxy_protocol_addr="$proxy_protocol_addr"
       upstream_addr="$upstream_addr"
       upstream_response_length="$upstream_response_length"
       upstream_response_time="$upstream_response_time"
@@ -73,7 +73,7 @@ controller:
       http_user_agent="$http_user_agent"
       x_forwarded_for="$proxy_add_x_forwarded_for"
       request_id="$req_id"'
-  # NOTE: default log format
+  # NOTE: default log regex
   # ^((?<remote>[^ ]*) - (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*) "(?<referer>[^\"]*)"
   # "(?<agent>[^\"]*)" (?<request_length>[^ ]*) (?<request_time>[^ ]*) \[(?<proxy_upstream_name>[^ ]*)\] \[(?<proxy_alternative_upstream_name>[^ ]*)\]
   # (?<upstream_addr>[^ ]*) (?<upstream_response_length>[^ ]*) (?<upstream_response_time>[^ ]*) (?<upstream_status>[^ ]*) (?<req_id>[^ ]*).*)$
