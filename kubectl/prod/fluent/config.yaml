@@ -1,11 +1,11 @@
 apiVersion: fluentbit.fluent.io/v1alpha2
 kind: ClusterOutput
 metadata:
-  namespace: fluent
-  name: postgresql
   labels:
     fluentbit.fluent.io/enabled: "true"
-    fluentbit.fluent.io/mode: "fluentbit-only"
+    fluentbit.fluent.io/mode: fluentbit-only
+  name: postgresql
+  namespace: fluent
 spec:
   customPlugin:
     config: |
@@ -28,13 +28,13 @@ metadata:
   name: fluent-bit-config
   namespace: fluent
 spec:
-  filterSelector:
-    matchLabels:
-      fluentbit.fluent.io/enabled: "true"
   clusterMultilineParserSelector:
     matchLabels:
       fluentbit.fluent.io/enabled: "true"
   clusterParserSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  filterSelector:
     matchLabels:
       fluentbit.fluent.io/enabled: "true"
   multilineParserSelector:
@@ -54,30 +54,30 @@ spec:
 apiVersion: fluentbit.fluent.io/v1alpha2
 kind: ClusterParser
 metadata:
-  name: logfmt
   labels:
     fluentbit.fluent.io/enabled: "true"
-    fluentbit.fluent.io/mode: "fluentbit-only"
+    fluentbit.fluent.io/mode: fluentbit-only
+  name: logfmt
 spec:
   logfmt: {}
 ---
 apiVersion: fluentbit.fluent.io/v1alpha2
 kind: ClusterFilter
 metadata:
-  name: cluster-filter
   labels:
     fluentbit.fluent.io/component: logging
     fluentbit.fluent.io/enabled: "true"
-    fluentbit.fluent.io/mode: "fluentbit-only"
+    fluentbit.fluent.io/mode: fluentbit-only
+  name: cluster-filter
 spec:
-  match: "kube.*"
   filters:
     - kubernetes:
-        labels: true
         annotations: false
+        k8sLoggingExclude: true
+        k8sLoggingParser: true
+        labels: true
         mergeLog: true
         mergeLogKey: data
-        k8sLoggingParser: true
-        k8sLoggingExclude: true
     - grep:
         regex: $kubernetes['labels']['devops.kmontocam.com/parse-logs'] true
+  match: kube.*
