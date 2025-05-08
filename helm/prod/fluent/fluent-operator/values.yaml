@@ -202,7 +202,8 @@ fluentbit:
       memBufLimit: 32MB
       bufferMaxSize: ""
       path: "/var/log/containers/*.log"
-      skipLongLines: true
+      multilineParser: docker, cri
+      skipLongLines: false
       readFromHead: false
       # Use storageType as "filesystem" if you want to use filesystem as the buffering mechanism for tail input.
       storageType: memory
@@ -210,7 +211,7 @@ fluentbit:
       # multiline.parser
       # multilineParser: "docker, cri"
     systemd:
-      enable: false # NOTE: disabled
+      enable: false
       systemdFilter:
         enable: true
         filters: []
@@ -365,17 +366,13 @@ fluentbit:
         - java
         #  use custom multiline parser need set .Values.parsers.javaMultiline.enable = true
         # - java-multiline
-    kubernetes:
-      enable: true
-      labels: false
-      annotations: false
     containerd:
       # This is customized lua containerd log format converter, you can refer here:
       # https://github.com/fluent/fluent-operator/blob/master/charts/fluent-operator/templates/fluentbit-clusterfilter-containerd.yaml
       # https://github.com/fluent/fluent-operator/blob/master/charts/fluent-operator/templates/fluentbit-containerd-config.yaml
-      enable: true
+      enable: false
     systemd:
-      enable: true
+      enable: false
 
   kubeedge:
     enable: false

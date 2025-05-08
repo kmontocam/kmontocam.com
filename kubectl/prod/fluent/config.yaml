@@ -1,0 +1,83 @@
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterOutput
+metadata:
+  namespace: fluent
+  name: postgresql
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "fluentbit-only"
+spec:
+  customPlugin:
+    config: |
+      Name                pgsql
+      Match               *
+      Host                cnpg-cluster-rw.cnpg-system.svc.cluster.local
+      Port                5432
+      User                kmontocam
+      Password            ...
+      Database            kmontocam
+      Table               fluentbit
+      Connection_Options  -c statement_timeout=0
+      Timestamp_Key       ts
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: FluentBitConfig
+metadata:
+  labels:
+    app.kubernetes.io/name: fluent-bit
+  name: fluent-bit-config
+  namespace: fluent
+spec:
+  filterSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  clusterMultilineParserSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  clusterParserSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  multilineParserSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  outputSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  parserSelector:
+    matchLabels:
+      fluentbit.fluent.io/enabled: "true"
+  service:
+    httpServer: true
+    parsersFiles:
+      - parsers.conf
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterParser
+metadata:
+  name: logfmt
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "fluentbit-only"
+spec:
+  logfmt: {}
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterFilter
+metadata:
+  name: cluster-filter
+  labels:
+    fluentbit.fluent.io/component: logging
+    fluentbit.fluent.io/enabled: "true"
+    fluentbit.fluent.io/mode: "fluentbit-only"
+spec:
+  match: "kube.*"
+  filters:
+    - kubernetes:
+        labels: true
+        annotations: false
+        mergeLog: true
+        mergeLogKey: data
+        k8sLoggingParser: true
+        k8sLoggingExclude: true
+    - grep:
+        regex: $kubernetes['labels']['devops.kmontocam.com/parse-logs'] true
