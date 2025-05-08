@@ -14,6 +14,7 @@ namespaceOverride: ""
 ## Labels to apply to all resources
 ##
 commonLabels:
+  devops.kmontocam.com/parse-logs: "true"
   devops.kmontocam.com: "true"
 # scmhash: abc123
 # myLabel: aakkmd
@@ -395,7 +396,9 @@ controller:
   healthCheckHost: ""
   # -- Annotations to be added to controller pods
   ##
-  podAnnotations: {}
+  podAnnotations:
+    fluentbit.io/parser_stdout-controller: logfmt
+    fluentbit.io/exclude_stderr-controller: "true"
   replicaCount: 1
   # -- Minimum available pods set in PodDisruptionBudget.
   # Define either 'minAvailable' or 'maxUnavailable', never both.
