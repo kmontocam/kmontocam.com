@@ -11,6 +11,7 @@ dependency "s3b" {
 }
 
 inputs = {
+  error_key     = "404.html"
   s3b_id        = dependency.s3b.outputs.s3b_id
   routing_rules = null
   is_cf_cname   = true
